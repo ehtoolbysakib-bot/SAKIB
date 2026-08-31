@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { personalInfo } from '../data/portfolioData';
 import {
   ArrowRight,
@@ -10,14 +10,12 @@ import {
   Terminal,
   ShieldCheck,
   Bot,
-  Play,
-  Check,
-  Copy,
-  Layers,
-  Zap,
-  Globe,
+  CheckCircle2,
+  Laptop,
   Cpu,
-  Smartphone,
+  Layers,
+  Database,
+  Flame,
 } from 'lucide-react';
 
 interface HeroProps {
@@ -37,12 +35,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCVModal }) => {
   const [titleIndex, setTitleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-
-  // Interactive Code Terminal state
-  const [activeTab, setActiveTab] = useState<'profile' | 'bot' | 'security'>('profile');
-  const [isRunning, setIsRunning] = useState(false);
-  const [terminalOutput, setTerminalOutput] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const currentTarget = titles[titleIndex];
@@ -87,63 +79,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCVModal }) => {
     }
   };
 
-  const handleRunCode = () => {
-    setIsRunning(true);
-    setTerminalOutput('কম্পাইলিং হচ্ছে...');
-    setTimeout(() => {
-      setIsRunning(false);
-      if (activeTab === 'profile') {
-        setTerminalOutput('✓ স্ট্যাটাস: সিস্টেম সক্রিয় | ⚡ ৬+ বছরের অভিজ্ঞতা লোড হয়েছে | রেডি!');
-      } else if (activeTab === 'bot') {
-        setTerminalOutput('✓ মেসেঞ্জার ও টেলিগ্রাম বট হুক কানেক্টেড | ২৪/৭ অটোমেশন চালু!');
-      } else {
-        setTerminalOutput('✓ DarkByteCrew সিকিউরিটি মডিউল অডিট কমপ্লিট | ০ ভালনারেবিলিটি!');
-      }
-    }, 600);
-  };
-
-  const handleCopyCode = () => {
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const codeSnippets = {
-    profile: `// Developer Profile: MD SAKIB HOSEN
-const developer = {
-  name: "MD SAKIB HOSEN",
-  role: "Full Stack Dev & UI/UX",
-  experience: "6+ Years (2019-Present)",
-  stack: ["React", "Node.js", "Python", "PHP", "MySQL", "MongoDB"],
-  education: "HSC 2025 @ Govt Akbar Ali College",
-  status: "Available for new projects 🚀",
-  location: "Bangladesh 🇧🇩"
-};
-
-export default developer;`,
-    bot: `// Messenger & Telegram Bot Engine
-import { BotEngine } from 'sakib-automation';
-
-const bot = new BotEngine({
-  platform: ['Messenger', 'Telegram'],
-  community: 'Group Adda & Community Bot',
-  autoResponse: true,
-  responseTime: '<50ms'
-});
-
-bot.on('message', async (msg) => {
-  return bot.smartReply(msg.text);
-});`,
-    security: `# DarkByteCrew Security Research Tool
-import sys
-from darkbyte import SecurityAuditor
-
-auditor = SecurityAuditor(target="authorized_env")
-results = auditor.run_full_audit()
-
-print(f"[+] Audit Passed: {results.status}")
-print("[+] Protected with Modern Security Protocols")`,
-  };
-
   return (
     <section
       id="home"
@@ -166,7 +101,7 @@ print("[+] Protected with Modern Security Protocols")`,
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, duration: 0.4 }}
+              transition={{ delay: 0.1 }}
               className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/95 border border-cyan-300/70 shadow-xs mb-5"
             >
               <div className="w-6 h-6 rounded-full overflow-hidden border border-cyan-400 shrink-0">
@@ -186,66 +121,50 @@ print("[+] Protected with Modern Security Protocols")`,
               </span>
             </motion.div>
 
-            {/* Main Headline with Animated Typing Effect */}
-            <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[104px] flex items-center mb-3">
-              <h1
-                id="hero-headline"
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-bold tracking-tight text-slate-900 leading-[1.25] flex flex-wrap items-baseline gap-x-2.5"
-              >
-                <span>হাই, আমি</span>
-                <span className="bg-gradient-to-r from-cyan-600 via-sky-500 to-blue-600 bg-clip-text text-transparent underline decoration-cyan-400/40 decoration-wavy decoration-2">
+            {/* Main Greeting & Typewriter Heading */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.2] mb-3">
+              <span className="block text-slate-900 font-display">
+                হাই, আমি{' '}
+                <span className="text-cyan-600 inline-block min-w-[200px] border-r-2 border-cyan-500 pr-1 animate-pulse">
                   {displayText}
                 </span>
-                <span
-                  className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-cyan-500 ml-0.5 align-baseline animate-pulse rounded-full shadow-[0_0_8px_rgba(6,182,212,0.8)]"
-                  aria-hidden="true"
-                />
-              </h1>
-            </div>
+              </span>
+            </h1>
 
-            {/* Subtitle */}
-            <h2
-              id="hero-subtitle"
-              className="text-lg sm:text-xl md:text-2xl font-bold text-slate-700 mb-4 flex items-center gap-2"
-            >
-              <span className="text-cyan-700">ফুল স্ট্যাক ওয়েব ডেভেলপার ও UI/UX ডিজাইনার</span>
-            </h2>
-
-            {/* Intro Text in Bangla */}
-            <p
-              id="hero-intro-text"
-              className="text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mb-8"
-            >
-              {personalInfo.bio}
+            {/* Sub-headline */}
+            <p className="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 mb-4">
+              ফুল স্ট্যাক ওয়েব ডেভেলপার ও UI/UX ডিজাইনার
             </p>
 
-            {/* CTA Buttons in Bangla */}
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto mb-8">
-              {/* View My Work */}
+            {/* Bengali Narrative Description */}
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mb-7">
+              আমি <strong className="text-slate-900 font-bold">MD SAKIB HOSEN</strong>, একজন প্রফেশনাল ফুল স্ট্যাক ডেভেলপার এবং UI/UX ডিজাইনার। বিগত ৬+ বছর ধরে আধুনিক ওয়েবসাইট, ওয়েব অ্যাপ্লিকেশন, অটোমেশন বট এবং ব্যবহারকারী-বান্ধব ডিজিটাল প্ল্যাটফর্ম তৈরি করে আসছি। আমার মূল লক্ষ্য হলো উচ্চ কর্মক্ষমতাসম্পন্ন, সুরক্ষিত এবং দৃষ্টিনন্দন ডিজিটাল অভিজ্ঞতা উপহার দেওয়া।
+            </p>
+
+            {/* Call to Actions (CTAs) */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-7">
               <button
-                id="hero-view-work-btn"
+                id="hero-explore-projects-btn"
                 onClick={() => scrollToSection('projects')}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-md hover:shadow-cyan-500/25 transition-all active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-sm shadow-md hover:shadow-lg hover:shadow-cyan-500/25 transition-all transform active:scale-95 cursor-pointer"
               >
                 <span>প্রজেক্টসমূহ দেখুন</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              {/* Contact Me */}
               <button
                 id="hero-contact-btn"
                 onClick={() => scrollToSection('contact')}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm sm:text-base text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-400 shadow-xs transition-all active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-cyan-50/70 text-slate-800 hover:text-cyan-700 font-bold text-sm border border-slate-300 hover:border-cyan-300 shadow-xs transition-all cursor-pointer"
               >
                 <Mail className="w-4 h-4 text-cyan-600" />
                 <span>যোগাযোগ করুন</span>
               </button>
 
-              {/* Download CV */}
               <button
-                id="hero-download-cv-btn"
+                id="hero-view-cv-btn"
                 onClick={onOpenCVModal}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm sm:text-base text-cyan-700 bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 transition-all active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-3 rounded-xl bg-cyan-50/80 hover:bg-cyan-100 text-cyan-800 font-bold text-sm border border-cyan-200 shadow-xs transition-all cursor-pointer"
               >
                 <Download className="w-4 h-4 text-cyan-600" />
                 <span>সিভি দেখুন (CV)</span>
@@ -272,184 +191,139 @@ print("[+] Protected with Modern Security Protocols")`,
             </div>
           </motion.div>
 
-          {/* Right Column: Modern Animated Developer Workstation Card */}
+          {/* Right Column: High-End Animated Portrait Showcase */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="lg:col-span-6 xl:col-span-5 relative w-full flex flex-col items-center"
+            className="lg:col-span-6 xl:col-span-5 relative w-full flex flex-col items-center justify-center pt-8 sm:pt-6"
           >
-            {/* Top Floating Badge */}
+            {/* Animated Rotating Gradient Aura */}
             <motion.div
-              animate={{ y: [0, -6, 0] }}
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 24, ease: 'linear' }}
+              className="absolute -inset-4 sm:-inset-8 rounded-[3rem] bg-gradient-to-r from-cyan-400/25 via-sky-400/20 to-blue-500/25 blur-3xl -z-10 pointer-events-none"
+            />
+
+            {/* Floating Top Left Badge: Identity */}
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-              className="absolute -top-4 -left-3 sm:-left-6 z-20 px-3 py-1.5 rounded-xl bg-white/95 backdrop-blur-md border border-cyan-200/90 shadow-lg shadow-cyan-500/10 flex items-center gap-2.5"
+              className="absolute -top-3 sm:-top-5 -left-2 sm:-left-6 z-20 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-cyan-200/90 shadow-xl shadow-cyan-500/15 flex items-center gap-2.5"
             >
-              <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-400 shrink-0">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-sm shrink-0">
+                <Code2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-extrabold text-slate-900 leading-tight">MD SAKIB HOSEN</p>
+                <p className="text-[10px] text-cyan-600 font-mono font-semibold">ফুল স্ট্যাক ডেভেলপার</p>
+              </div>
+            </motion.div>
+
+            {/* Floating Top Right Badge: Experience */}
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 4.8, ease: 'easeInOut', delay: 0.5 }}
+              className="absolute -top-4 sm:-top-6 -right-2 sm:-right-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-sky-200/90 shadow-xl shadow-sky-500/15 flex items-center gap-2"
+            >
+              <div className="w-8 h-8 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 font-extrabold text-xs shrink-0">
+                ৬+
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-900 leading-tight">বছরের অভিজ্ঞতা</p>
+                <p className="text-[10px] text-sky-600 font-mono">২০১৯ — বর্তমান</p>
+              </div>
+            </motion.div>
+
+            {/* Floating Bottom Left Badge: Open for Projects */}
+            <motion.div
+              animate={{ y: [0, 7, 0] }}
+              transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut', delay: 1 }}
+              className="absolute -bottom-4 sm:-bottom-5 -left-2 sm:-left-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-emerald-200/90 shadow-xl shadow-emerald-500/15 flex items-center gap-2.5"
+            >
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-900 leading-tight">প্রজেক্টের জন্য উন্মুক্ত</p>
+                <p className="text-[10px] text-emerald-600 font-mono font-medium">১০০% রেসপনসিভ কাজ</p>
+              </div>
+            </motion.div>
+
+            {/* Floating Bottom Right Badge: DarkByteCrew Security */}
+            <motion.div
+              animate={{ y: [0, -7, 0] }}
+              transition={{ repeat: Infinity, duration: 4.2, ease: 'easeInOut', delay: 0.8 }}
+              className="absolute -bottom-4 sm:-bottom-5 -right-2 sm:-right-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-purple-200/90 shadow-xl shadow-purple-500/15 flex items-center gap-2"
+            >
+              <div className="w-8 h-8 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600 shrink-0">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-900 leading-tight">DarkByteCrew</p>
+                <p className="text-[10px] text-purple-600 font-mono">সিকিউরিটি রিসার্চ</p>
+              </div>
+            </motion.div>
+
+            {/* Main Portrait Card with Floating Animation & Hover Polish */}
+            <motion.div
+              animate={{ y: [-6, 6, -6] }}
+              transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
+              className="relative w-full max-w-[340px] sm:max-w-[400px] aspect-[4/5] rounded-3xl p-2.5 sm:p-3 bg-gradient-to-tr from-cyan-500 via-sky-400 to-blue-600 shadow-2xl shadow-cyan-950/20 group"
+            >
+              {/* Inner Frame with Image */}
+              <div className="w-full h-full rounded-[22px] overflow-hidden bg-slate-950 relative shadow-inner">
                 <img
                   src={personalInfo.avatarUrl}
-                  alt="MD Sakib Hosen"
-                  className="w-full h-full object-cover object-top"
+                  alt="MD SAKIB HOSEN - Professional Full Stack Developer"
+                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
-              </div>
-              <div className="text-left">
-                <p className="text-[11px] font-bold text-slate-900 leading-tight">MD SAKIB HOSEN</p>
-                <p className="text-[10px] text-cyan-600 font-mono">৬+ বছরের অভিজ্ঞতা</p>
-              </div>
-            </motion.div>
 
-            {/* Bottom Floating Badge */}
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut', delay: 1 }}
-              className="absolute -bottom-4 -right-2 sm:-right-4 z-20 px-3.5 py-1.5 rounded-xl bg-white/95 backdrop-blur-md border border-emerald-200/90 shadow-lg shadow-emerald-500/10 flex items-center gap-2"
-            >
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <div className="text-left">
-                <p className="text-[11px] font-bold text-slate-900 leading-tight">প্রজেক্টের জন্য উন্মুক্ত</p>
-                <p className="text-[10px] text-emerald-600 font-mono">১০০% রেসপনসিভ কাজ</p>
-              </div>
-            </motion.div>
-
-            {/* Main Interactive Terminal Window */}
-            <div className="w-full rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-700/80 shadow-2xl shadow-cyan-950/20 overflow-hidden text-slate-200">
-              {/* Window Header */}
-              <div className="px-4 py-3 bg-slate-950/90 border-b border-slate-800 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
-                  <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
-                  <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
-                  <div className="flex items-center gap-1.5 ml-2">
-                    <img
-                      src={personalInfo.avatarUrl}
-                      alt="Sakib"
-                      className="w-4 h-4 rounded-full object-cover object-top border border-cyan-400/60"
-                      referrerPolicy="no-referrer"
-                    />
-                    <span className="text-[11px] font-mono text-slate-300">
-                      sakib@developer-core:~
-                    </span>
+                {/* Subtle Gradient Overlay for Text legibility at bottom */}
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex flex-col justify-end p-5 text-white">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+                        <span>MD SAKIB HOSEN</span>
+                        <CheckCircle2 className="w-4 h-4 text-cyan-400 inline" />
+                      </h3>
+                      <p className="text-xs text-cyan-300 font-mono font-medium">
+                        Govt Akbar Ali College • HSC 2025
+                      </p>
+                    </div>
+                    <div className="px-2.5 py-1 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-[11px] font-mono text-cyan-200">
+                      🇧🇩 BD
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={handleCopyCode}
-                    className="p-1 rounded-md hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs transition-colors"
-                    title="Copy Code"
-                  >
-                    {copied ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-3.5 h-3.5" />
-                    )}
-                  </button>
-                  <button
-                    onClick={handleRunCode}
-                    disabled={isRunning}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    <Play className="w-3 h-3 fill-current" />
-                    <span>Run</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Terminal Tabs */}
-              <div className="flex items-center bg-slate-950/60 border-b border-slate-800 px-2 pt-1.5 overflow-x-auto gap-1">
-                <button
-                  onClick={() => {
-                    setActiveTab('profile');
-                    setTerminalOutput(null);
-                  }}
-                  className={`px-3 py-1.5 rounded-t-lg text-xs font-mono transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                    activeTab === 'profile'
-                      ? 'bg-slate-900 text-cyan-300 border-t-2 border-cyan-400 font-semibold'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
-                  }`}
-                >
-                  <Code2 className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Developer.config.ts</span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    setActiveTab('bot');
-                    setTerminalOutput(null);
-                  }}
-                  className={`px-3 py-1.5 rounded-t-lg text-xs font-mono transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                    activeTab === 'bot'
-                      ? 'bg-slate-900 text-cyan-300 border-t-2 border-cyan-400 font-semibold'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
-                  }`}
-                >
-                  <Bot className="w-3.5 h-3.5 text-sky-400" />
-                  <span>BotAutomation.js</span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    setActiveTab('security');
-                    setTerminalOutput(null);
-                  }}
-                  className={`px-3 py-1.5 rounded-t-lg text-xs font-mono transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                    activeTab === 'security'
-                      ? 'bg-slate-900 text-cyan-300 border-t-2 border-cyan-400 font-semibold'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
-                  }`}
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>SecurityTool.py</span>
-                </button>
-              </div>
-
-              {/* Code Editor Body */}
-              <div className="p-4 font-mono text-xs sm:text-[13px] leading-relaxed overflow-x-auto min-h-[220px] max-h-[260px] bg-slate-900/95">
-                <pre className="text-slate-300">
-                  <code>{codeSnippets[activeTab]}</code>
-                </pre>
-              </div>
-
-              {/* Execution Output Console */}
-              <div className="px-4 py-3 bg-slate-950 border-t border-slate-800 text-xs font-mono">
-                <div className="flex items-center justify-between text-slate-400 mb-1">
-                  <span className="flex items-center gap-1.5 text-[11px] text-cyan-400">
-                    <Terminal className="w-3.5 h-3.5" /> কনসোল আউটপুট (Console)
+                {/* Floating Micro Tech Pills over Image */}
+                <div className="absolute top-4 right-4 flex flex-col gap-1.5">
+                  <span className="px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-cyan-400/50 text-[10px] font-mono font-bold text-cyan-300 shadow-md">
+                    React & Node.js
                   </span>
-                  <span className="text-[10px] text-slate-500">Live Status</span>
-                </div>
-                <div className="text-emerald-400 font-mono text-xs min-h-[20px] flex items-center">
-                  {terminalOutput ? (
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-emerald-300"
-                    >
-                      {terminalOutput}
-                    </motion.span>
-                  ) : (
-                    <span className="text-slate-500">
-                      'Run' বাটনে ক্লিক করে লাইভ কোড এক্সিকিউট করুন...
-                    </span>
-                  )}
+                  <span className="px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-sky-400/50 text-[10px] font-mono font-bold text-sky-300 shadow-md">
+                    Python & Bot
+                  </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Quick Tech Pill Badges below workstation */}
-            <div className="grid grid-cols-3 gap-2 mt-4 w-full">
-              <div className="p-2.5 rounded-xl bg-white/90 border border-slate-200 text-center shadow-xs">
-                <p className="text-[11px] font-bold text-slate-900">৮+ প্রজেক্ট</p>
-                <p className="text-[10px] text-slate-500 font-mono">সফলভাবে তৈরি</p>
+            {/* Quick Stats Row below the photo */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-6 sm:mt-7 w-full max-w-[400px]">
+              <div className="p-3 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200 text-center shadow-xs hover:border-cyan-300 transition-colors">
+                <p className="text-sm font-extrabold text-slate-900">৮+ প্রজেক্ট</p>
+                <p className="text-[10px] text-slate-500 font-mono mt-0.5">সফল ডেলিভারি</p>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/90 border border-slate-200 text-center shadow-xs">
-                <p className="text-[11px] font-bold text-slate-900">মোবাইল-ফার্স্ট</p>
-                <p className="text-[10px] text-cyan-600 font-mono">১০০% রেসপনসিভ</p>
+              <div className="p-3 rounded-2xl bg-white/95 backdrop-blur-md border border-cyan-200/90 text-center shadow-xs hover:border-cyan-300 transition-colors bg-cyan-50/30">
+                <p className="text-sm font-extrabold text-cyan-800">৬+ বছর</p>
+                <p className="text-[10px] text-cyan-600 font-mono mt-0.5">অভিজ্ঞতা</p>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/90 border border-slate-200 text-center shadow-xs">
-                <p className="text-[11px] font-bold text-slate-900">ক্লিন কোড</p>
-                <p className="text-[10px] text-emerald-600 font-mono">সিকিউর ও ফাস্ট</p>
+              <div className="p-3 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200 text-center shadow-xs hover:border-cyan-300 transition-colors">
+                <p className="text-sm font-extrabold text-slate-900">২৪/৭</p>
+                <p className="text-[10px] text-emerald-600 font-mono mt-0.5">সক্রিয় সাপোর্ট</p>
               </div>
             </div>
           </motion.div>

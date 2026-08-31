@@ -129,25 +129,60 @@ export const Contact: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      setIsSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-        honeypot: '',
+      // Direct live email delivery using FormSubmit AJAX to mdsakibhosen1219@gmail.com
+      const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: `[MD SAKIB HOSEN Portfolio] ${formData.subject} (From: ${formData.name})`,
+          message: formData.message,
+          _template: 'table',
+          _captcha: 'false',
+        }),
       });
 
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#06b6d4', '#0284c7', '#38bdf8', '#10b981'],
-      });
+      const data = await response.json();
+
+      if (response.ok && (data.success === 'true' || data.success === true)) {
+        setIsSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+          honeypot: '',
+        });
+
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#06b6d4', '#0284c7', '#38bdf8', '#10b981'],
+        });
+      } else {
+        // Fallback to mailto if submission fails
+        const mailtoUrl = `mailto:${personalInfo.email}?subject=${encodeURIComponent(
+          formData.subject
+        )}&body=${encodeURIComponent(
+          `নাম: ${formData.name}\nইমেইল: ${formData.email}\n\nমেসেজ:\n${formData.message}`
+        )}`;
+        window.open(mailtoUrl, '_blank');
+        setIsSuccess(true);
+      }
     } catch (err) {
-      setErrorMessage('মেসেজ পাঠাতে সমস্যা হয়েছে। দয়া করে হোয়াটসঅ্যাপ বা সরাসরি ইমেইলে যোগাযোগ করুন।');
+      // Fallback to mailto link on network error
+      const mailtoUrl = `mailto:${personalInfo.email}?subject=${encodeURIComponent(
+        formData.subject
+      )}&body=${encodeURIComponent(
+        `নাম: ${formData.name}\nইমেইল: ${formData.email}\n\nমেসেজ:\n${formData.message}`
+      )}`;
+      window.open(mailtoUrl, '_blank');
+      setIsSuccess(true);
     } finally {
       setIsLoading(false);
     }
